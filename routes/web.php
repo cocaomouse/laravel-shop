@@ -18,8 +18,9 @@ use Illuminate\Support\Facades\Auth;
 /*Route::get('/', function () {
     return view('welcome');
 });*/
-Route::get('/',[PagesController::class,'root'])->name('root');
+Route::get('/', [PagesController::class, 'root'])->name('root');
 
+//Auth::routes(['verify' => true]);
 Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
