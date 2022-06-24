@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\UserAddressesController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -24,3 +25,7 @@ Route::get('/', [PagesController::class, 'root'])->name('root');
 Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// auth中间件代表需要登录
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('user_addresses', [UserAddressesController::class,'index'])->name('user_addresses.index');
+});
