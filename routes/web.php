@@ -27,5 +27,10 @@ Auth::routes();
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // auth中间件代表需要登录
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('user_addresses', [UserAddressesController::class,'index'])->name('user_addresses.index');
+    Route::prefix('user_addresses')->group(function () {
+        Route::get('', [UserAddressesController::class, 'index'])->name('user_addresses.index');
+        Route::get('create', [UserAddressesController::class, 'create'])->name('user_addresses.create');
+        Route::post('store', [UserAddressesController::class, 'store'])->name('user_addresses.store');
+    });
+
 });

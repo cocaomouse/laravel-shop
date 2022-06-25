@@ -12,6 +12,7 @@ class UserAddress extends Model
     protected $fillable = [
         'province',
         'city',
+        'district',
         'address',
         'zip',
         'contact_name',
