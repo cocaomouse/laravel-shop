@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('', [UserAddressesController::class, 'index'])->name('user_addresses.index');
         Route::get('create', [UserAddressesController::class, 'create'])->name('user_addresses.create');
         Route::post('store', [UserAddressesController::class, 'store'])->name('user_addresses.store');
+        Route::get('{user_address}',[UserAddressesController::class,'edit'])->name('user_addresses.edit');
+        Route::put('{user_address}',[UserAddressesController::class,'update'])->name('user_addresses.update');
     });
 
 });
