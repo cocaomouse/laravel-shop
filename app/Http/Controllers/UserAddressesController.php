@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserAddress;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserAddressRequest;
 
@@ -38,11 +39,23 @@ class UserAddressesController extends Controller
 
     public function edit(UserAddress $user_address)
     {
-        return view('user_addresses.create_and_edit',['address' => $user_address]);
+        $this->authorize('own', $user_address);
+
+        return view('user_addresses.create_and_edit', ['address' => $user_address]);
     }
 
-    public function update(UserAddress $user_address,UserAddressRequest $request)
+    /**
+     * 更新用户指定地址
+     *
+     * @param Request $request
+     * @param UserAddress $user_address
+     * @return Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function update(UserAddressRequest $request, UserAddress $user_address)
     {
+        $this->authorize('own', $user_address);
+
         $user_address->update($request->only([
             'province',
             'city',
@@ -54,5 +67,15 @@ class UserAddressesController extends Controller
         ]));
 
         return redirect()->route('user_addresses.index');
+    }
+
+    public function destroy(UserAddress $user_address)
+    {
+        $this->authorize('own', $user_address);
+
+        $user_address->delete();
+
+        //return redirect()->route('user_addresses.index');
+        return [];
     }
 }
