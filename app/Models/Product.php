@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -19,6 +21,15 @@ class Product extends Model
 
     public function skus()
     {
-        return $this->hasMany('App\Models\ProductSku','product_id','id');
+        return $this->hasMany('App\Models\ProductSku', 'product_id', 'id');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        // 如果 image 字段本身就已经是完整的 url 就直接返回
+        if (Str::startsWith($this->attributes['image'], ['http://', 'https://'])) {
+            return $this->attributes['image'];
+        }
+        return \Storage::disk('public')->url($this->attributes['image']);
     }
 }

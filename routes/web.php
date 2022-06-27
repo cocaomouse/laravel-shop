@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\UserAddressesController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -15,14 +16,13 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-Route::get('/', [PagesController::class, 'root'])->name('root');
+//Route::get('/', [PagesController::class, 'root'])->name('root');
 
 //Auth::routes(['verify' => true]);
 Auth::routes();
+
+Route::redirect('/','/products')->name('root');
+Route::get('products',[ProductsController::class,'index'])->name('products.index');
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // auth中间件代表需要登录
