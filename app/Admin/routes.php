@@ -3,6 +3,7 @@
 use Illuminate\Routing\Router;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\UsersController;
+use App\Admin\Controllers\ProductsController;
 
 Admin::routes();
 
@@ -14,4 +15,5 @@ Route::group([
 ], function (Router $router) {
     $router->get('/', [HomeController::class,'index'])->name('home');
     $router->get('users',[UsersController::class,'index']);
+    $router->get('products',[ProductsController::class,'index']);
 });
