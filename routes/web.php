@@ -22,7 +22,10 @@ use Illuminate\Support\Facades\Auth;
 Auth::routes();
 
 Route::redirect('/','/products')->name('root');
-Route::get('products',[ProductsController::class,'index'])->name('products.index');
+Route::prefix('products')->group(function(){
+    Route::get('',[ProductsController::class,'index'])->name('products.index');
+    Route::get('{product}',[ProductsController::class,'show'])->name('products.show');
+});
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // auth中间件代表需要登录
