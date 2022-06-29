@@ -24,11 +24,12 @@ Auth::routes();
 Route::redirect('/', '/products')->name('root');
 Route::prefix('products')->group(function () {
     Route::get('', [ProductsController::class, 'index'])->name('products.index');
-    Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
     Route::group(['middleware' => ['auth']], function () {
         Route::post('{product}/favorite', [ProductsController::class, 'favor'])->name('products.favor');
         Route::delete('{product}/favorite', [ProductsController::class, 'disfavor'])->name('products.disfavor');
+        Route::get('favorites',[ProductsController::class,'favorites'])->name('products.favorites');
     });
+    Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
 });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
