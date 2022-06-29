@@ -21,10 +21,14 @@ use Illuminate\Support\Facades\Auth;
 //Auth::routes(['verify' => true]);
 Auth::routes();
 
-Route::redirect('/','/products')->name('root');
-Route::prefix('products')->group(function(){
-    Route::get('',[ProductsController::class,'index'])->name('products.index');
-    Route::get('{product}',[ProductsController::class,'show'])->name('products.show');
+Route::redirect('/', '/products')->name('root');
+Route::prefix('products')->group(function () {
+    Route::get('', [ProductsController::class, 'index'])->name('products.index');
+    Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::post('{product}/favorite', [ProductsController::class, 'favor'])->name('products.favor');
+        Route::delete('{product}/favorite', [ProductsController::class, 'disfavor'])->name('products.disfavor');
+    });
 });
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -34,9 +38,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('', [UserAddressesController::class, 'index'])->name('user_addresses.index');
         Route::get('create', [UserAddressesController::class, 'create'])->name('user_addresses.create');
         Route::post('store', [UserAddressesController::class, 'store'])->name('user_addresses.store');
-        Route::get('{user_address}',[UserAddressesController::class,'edit'])->name('user_addresses.edit');
-        Route::put('{user_address}',[UserAddressesController::class,'update'])->name('user_addresses.update');
-        Route::delete('{user_address}',[UserAddressesController::class,'destroy'])->name('user_addresses.destroy');
+        Route::get('{user_address}', [UserAddressesController::class, 'edit'])->name('user_addresses.edit');
+        Route::put('{user_address}', [UserAddressesController::class, 'update'])->name('user_addresses.update');
+        Route::delete('{user_address}', [UserAddressesController::class, 'destroy'])->name('user_addresses.destroy');
     });
 
 });

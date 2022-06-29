@@ -24,6 +24,11 @@ class Product extends Model
         return $this->hasMany('App\Models\ProductSku', 'product_id', 'id');
     }
 
+    public function favoriteUsers()
+    {
+        return $this->belongsToMany('App\Models\User','user_favorite_products','product_id','user_id');
+    }
+
     public function getImageUrlAttribute()
     {
         // 如果 image 字段本身就已经是完整的 url 就直接返回
