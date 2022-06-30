@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\UserAddressesController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -27,7 +28,8 @@ Route::prefix('products')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
         Route::post('{product}/favorite', [ProductsController::class, 'favor'])->name('products.favor');
         Route::delete('{product}/favorite', [ProductsController::class, 'disfavor'])->name('products.disfavor');
-        Route::get('favorites',[ProductsController::class,'favorites'])->name('products.favorites');
+        Route::get('favorites', [ProductsController::class, 'favorites'])->name('products.favorites');
+        Route::post('cart', [CartController::class, 'add'])->name('cart.add');
     });
     Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
 });

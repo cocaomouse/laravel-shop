@@ -15,4 +15,9 @@ class ProductSku extends Model
     {
         return $this->belongsTo('App\Models\Product','product_id','id');
     }
+
+    public function cartItems()
+    {
+        return $this->hasMany('App\Models\CartItem','product_sku_id','id');
+    }
 }
