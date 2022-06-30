@@ -29,7 +29,6 @@ Route::prefix('products')->group(function () {
         Route::post('{product}/favorite', [ProductsController::class, 'favor'])->name('products.favor');
         Route::delete('{product}/favorite', [ProductsController::class, 'disfavor'])->name('products.disfavor');
         Route::get('favorites', [ProductsController::class, 'favorites'])->name('products.favorites');
-        Route::post('cart', [CartController::class, 'add'])->name('cart.add');
     });
     Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
 });
@@ -37,6 +36,11 @@ Route::prefix('products')->group(function () {
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // auth中间件代表需要登录
 Route::group(['middleware' => ['auth']], function () {
+    // 购物车
+    Route::get('cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('cart', [CartController::class, 'add'])->name('cart.add');
+    Route::delete('cart/{sku}',[CartController::class,'remove'])->name('cart.remove');
+    // 用户地址
     Route::prefix('user_addresses')->group(function () {
         Route::get('', [UserAddressesController::class, 'index'])->name('user_addresses.index');
         Route::get('create', [UserAddressesController::class, 'create'])->name('user_addresses.create');

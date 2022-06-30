@@ -119,7 +119,11 @@
           amount: $('.cart_amount input').val(),
         })
           .then(function () { // 请求成功执行此回调
-            swal('加入购物车成功', '', 'success');
+            swal('加入购物车成功', '', 'success')
+              // 添加成功后跳转到购物车页面
+              /*.then(function () {
+                location.href = '{{route('cart.index')}}';
+              });*/
           }, function (error) { // 请求失败执行此回调
             if (error.response.status === 401) {
 

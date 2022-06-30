@@ -20,6 +20,6 @@ class CartItem extends Model
 
     public function productSku()
     {
-        return $this->belongsTo('App\Models\User', 'product_sku_id', 'id');
+        return $this->belongsTo('App\Models\ProductSku', 'product_sku_id', 'id');
     }
 }
