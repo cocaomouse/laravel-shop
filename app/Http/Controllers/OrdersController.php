@@ -72,7 +72,7 @@ class OrdersController extends Controller
 
             // 将下单的商品从购物车中移除
             $skuIds = collect($items)->pluck('sku_id'); //从$items中创建一个新的集合,并获取对应的键值
-            $user->cartItems()->whereIn('product_sku_id',$skuIds)->delete();
+            $user->cartItems()->whereIn('product_sku_id', $skuIds)->delete();
 
             DB::commit();
             return true;
