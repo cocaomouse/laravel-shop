@@ -28,19 +28,18 @@ class OrdersController extends Controller
             if (!$address) {
                 throw new InvalidRequestException('用户地址为空');
             }
-            // 更新此地址的最后使用事件
+            // 更新此地址的最后使用时间
             $address->update(['last_used_at' => Carbon::now()]);
             // 创建一个新订单
             $address['address'] = $address->full_address;
             $address['zip'] = $address->zip;
             $address['contact_name'] = $address->contact_name;
             $address['contact_phone'] = $address->contact_phone;
+            
             $order->address = $address;
             $order->remark = $remark;
             $order->total_amount = 0;
-
-            // 订单关联到当前用户
-            $order->user()->associate($user);
+            $order->user()->associate($user);// 订单关联到当前用户
             $order->save();
 
             // 订单总价
