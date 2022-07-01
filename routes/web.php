@@ -5,6 +5,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\UserAddressesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrdersController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -40,6 +41,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('cart', [CartController::class, 'add'])->name('cart.add');
     Route::delete('cart/{sku}',[CartController::class,'remove'])->name('cart.remove');
+    // 购物车创建订单
+    Route::post('orders',[OrdersController::class,'store'])->name('orders.store');
     // 用户地址
     Route::prefix('user_addresses')->group(function () {
         Route::get('', [UserAddressesController::class, 'index'])->name('user_addresses.index');
