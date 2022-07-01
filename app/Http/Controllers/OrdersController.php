@@ -35,7 +35,7 @@ class OrdersController extends Controller
             $address['zip'] = $address->zip;
             $address['contact_name'] = $address->contact_name;
             $address['contact_phone'] = $address->contact_phone;
-            
+
             $order->address = $address;
             $order->remark = $remark;
             $order->total_amount = 0;
@@ -49,7 +49,7 @@ class OrdersController extends Controller
             foreach ($items as $data) {
                 $sku = $productSku->find($data['sku_id']);
                 // make()创建并返回一个未保存的关联模型实例
-                // 通过items()关联关系,创建一个OrderItem模型实例,并直接与当前订单模型关联
+                // 通过items()关联关系,创建一个OrderItem模型实例,并直接与当前订单模型($order)关联
                 // 同时为$item模型实例添加 amount price 两个对象值
                 $item = $order->items()->make([
                     'amount' => $data['amount'],
@@ -58,14 +58,13 @@ class OrdersController extends Controller
                 $item->product()->associate($sku->product_id);//等同于$item->product_id=$sku->product_id(仅在belongsTo时有效)
                 $item->productSku()->associate($sku);
                 $item->save();
+                // 订单总金额
                 $totalAmount += $sku->price * $data['amount'];
-
                 // 减库存
                 if ($sku->decreaseStock($data['amount']) < 0) {
                     throw new InvalidRequestException('该商品库存不足');
                 }
             }
-
             // 更新订单总金额
             $order->update(['total_amount' => $totalAmount]);
 
@@ -79,6 +78,5 @@ class OrdersController extends Controller
             DB::rollBack();
             return $e->getMessage();
         }
-
     }
 }
