@@ -42,9 +42,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('cart', [CartController::class, 'add'])->name('cart.add');
     Route::delete('cart/{sku}', [CartController::class, 'remove'])->name('cart.remove');
     // 购物车创建订单
-    Route::post('orders', [OrdersController::class, 'store'])->name('orders.store');
-    // 订单列表
-    Route::get('orders', [OrdersController::class, 'index'])->name('orders.index');
+    Route::prefix('orders')->group(function(){
+        Route::post('', [OrdersController::class, 'store'])->name('orders.store');
+        // 订单列表
+        Route::get('', [OrdersController::class, 'index'])->name('orders.index');
+        // 订单详情
+        Route::get('{order}',[OrdersController::class,'show'])->name('orders.show');
+    });
     // 用户地址
     Route::prefix('user_addresses')->group(function () {
         Route::get('', [UserAddressesController::class, 'index'])->name('user_addresses.index');

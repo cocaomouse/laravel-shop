@@ -92,10 +92,21 @@ class OrdersController extends Controller
             // 触发队列任务
             $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
 
-            return true;
+            return $order;
         } catch (\Exception $e) {
             DB::rollBack();
-            return $e->getMessage();
+            return false;
         }
+    }
+
+    public function show(Order $order, Request $request)
+    {
+        $this->authorize('own', $order);
+
+        $order_info = $order->load(['items.productSku', 'items.product']);
+        //dd($order_info->address['address']);
+        return view('orders.show', [
+            'order' => $order_info
+        ]);
     }
 }
