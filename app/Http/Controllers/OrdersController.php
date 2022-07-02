@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
+use App\Jobs\CloseOrder;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
@@ -73,6 +74,10 @@ class OrdersController extends Controller
             $user->cartItems()->whereIn('product_sku_id', $skuIds)->delete();
 
             DB::commit();
+
+            // 触发队列任务
+            $this->dispatch(new CloseOrder($order,config('app.order_ttl')));
+
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
