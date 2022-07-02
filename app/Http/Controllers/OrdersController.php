@@ -15,6 +15,20 @@ use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $user = $request->user();
+
+        $orders = Order::query()
+            ->with(['items.product', 'items.productSku'])
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate();
+
+        return view('orders.index', ['orders' => $orders]);
+    }
+
     public function store(OrderRequest $request, UserAddress $userAddress, Order $order, ProductSku $productSku)
     {
         // 开启一个数据库事务
@@ -76,7 +90,7 @@ class OrdersController extends Controller
             DB::commit();
 
             // 触发队列任务
-            $this->dispatch(new CloseOrder($order,config('app.order_ttl')));
+            $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
 
             return true;
         } catch (\Exception $e) {
