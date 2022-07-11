@@ -6,6 +6,7 @@ use App\Http\Controllers\UserAddressesController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\AlipayController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -22,6 +23,15 @@ use Illuminate\Support\Facades\Auth;
 
 //Auth::routes(['verify' => true]);
 Auth::routes();
+
+/*Route::get('alipay',function (){
+    return app('alipay')->web([
+        'out_trade_no' => ''.time(),
+        'total_amount' => '0.01',
+        'subject' => 'yansongda 测试 - 1'
+    ]);
+});
+Route::get('web', [AlipayController::class, 'web'])->name('pay.web');*/
 
 Route::redirect('/', '/products')->name('root');
 Route::prefix('products')->group(function () {
@@ -42,12 +52,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('cart', [CartController::class, 'add'])->name('cart.add');
     Route::delete('cart/{sku}', [CartController::class, 'remove'])->name('cart.remove');
     // 购物车创建订单
-    Route::prefix('orders')->group(function(){
+    Route::prefix('orders')->group(function () {
         Route::post('', [OrdersController::class, 'store'])->name('orders.store');
         // 订单列表
         Route::get('', [OrdersController::class, 'index'])->name('orders.index');
         // 订单详情
-        Route::get('{order}',[OrdersController::class,'show'])->name('orders.show');
+        Route::get('{order}', [OrdersController::class, 'show'])->name('orders.show');
     });
     // 用户地址
     Route::prefix('user_addresses')->group(function () {
