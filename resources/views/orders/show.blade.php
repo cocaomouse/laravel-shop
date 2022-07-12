@@ -28,17 +28,21 @@
                   </div>
                   <div>
               <span class="product-title">
-                 <a target="_blank" href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
+                 <a target="_blank"
+                    href="{{ route('products.show', [$item->product_id]) }}">{{ $item->product->title }}</a>
               </span>
                     <span class="sku-title">{{ $item->productSku->title }}</span>
                   </div>
                 </td>
                 <td class="sku-price text-center vertical-middle">￥{{ $item->price }}</td>
                 <td class="sku-amount text-center vertical-middle">{{ $item->amount }}</td>
-                <td class="item-amount text-right vertical-middle">￥{{ number_format($item->price * $item->amount, 2, '.', '') }}</td>
+                <td class="item-amount text-right vertical-middle">
+                  ￥{{ number_format($item->price * $item->amount, 2, '.', '') }}</td>
               </tr>
             @endforeach
-            <tr><td colspan="4"></td></tr>
+            <tr>
+              <td colspan="4"></td>
+            </tr>
           </table>
           <div class="order-bottom">
             <div class="order-info">
@@ -59,14 +63,14 @@
                 <div class="line-value">{{ $order->no }}</div>
               </div>
             </div>
-            <div class="order-summary text-right">
+            <div class="order-summary text-right" style="text-align:right;">
               <div class="total-amount">
                 <span>订单总价：</span>
-                <div class="value">￥{{ $order->total_amount }}</div>
+                <div class="value" style="width:100px;">￥{{ $order->total_amount }}</div>
               </div>
               <div>
                 <span>订单状态：</span>
-                <div class="value">
+                <div class="value" style="width:100px;">
                   @if($order->paid_at)
                     @if($order->refund_status === \App\Models\Order::REFUND_STATUS_PENDING)
                       已支付
@@ -80,6 +84,15 @@
                   @endif
                 </div>
               </div>
+              <!-- 支付按钮开始 -->
+              @if(!$order->paid_at && !$order->closed)
+                <div class="payment-buttons">
+                  <a class="btn btn-primary btn-sm" href="{{ route('payment.alipay',['order'=>$order->id]) }}">
+                    支付宝支付
+                  </a>
+                </div>
+              @endif
+              <!-- 支付按钮结束 -->
             </div>
           </div>
         </div>

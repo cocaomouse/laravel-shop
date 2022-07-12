@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\AlipayController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -34,15 +35,6 @@ Auth::routes();
 Route::get('web', [AlipayController::class, 'web'])->name('pay.web');*/
 
 Route::redirect('/', '/products')->name('root');
-Route::prefix('products')->group(function () {
-    Route::get('', [ProductsController::class, 'index'])->name('products.index');
-    Route::group(['middleware' => ['auth']], function () {
-        Route::post('{product}/favorite', [ProductsController::class, 'favor'])->name('products.favor');
-        Route::delete('{product}/favorite', [ProductsController::class, 'disfavor'])->name('products.disfavor');
-        Route::get('favorites', [ProductsController::class, 'favorites'])->name('products.favorites');
-    });
-    Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
-});
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // auth中间件代表需要登录
@@ -68,5 +60,20 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('{user_address}', [UserAddressesController::class, 'update'])->name('user_addresses.update');
         Route::delete('{user_address}', [UserAddressesController::class, 'destroy'])->name('user_addresses.destroy');
     });
+    // 支付
+    Route::get('payment/{order}/alipay',[PaymentController::class,'payByAlipay'])->name('payment.alipay');
+    // 支付前端回调
+    Route::get('payment/alipay/return',[PaymentController::class,'alipayReturn'])->name('payment.alipay.return');
+});
+// 支付服务端回调
+Route::post('payment/alipay/notify',[PaymentController::class,'alipayNotify'])->name('payment.alipay.notify');
 
+Route::prefix('products')->group(function () {
+    Route::get('', [ProductsController::class, 'index'])->name('products.index');
+    Route::group(['middleware' => ['auth']], function () {
+        Route::post('{product}/favorite', [ProductsController::class, 'favor'])->name('products.favor');
+        Route::delete('{product}/favorite', [ProductsController::class, 'disfavor'])->name('products.disfavor');
+        Route::get('favorites', [ProductsController::class, 'favorites'])->name('products.favorites');
+    });
+    Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
 });
