@@ -15,11 +15,11 @@ class AlipayController extends Controller
                 // 必填-应用私钥 字符串或路径
                 'app_secret_cert' => '89iZ2iC16H6/6a3YcP+hDZUjiNGQx9cuwi9eJyykvcwhD...',
                 // 必填-应用公钥证书 路径
-                'app_public_cert_path' => '/Users/yansongda/pay/cert/appCertPublicKey_2016082000295641.crt',
+                'app_public_cert_path' => '/Users/yansongda/pay/cert/appCertPublicKey_2016082000295641.cer',
                 // 必填-支付宝公钥证书 路径
-                'alipay_public_cert_path' => '/Users/yansongda/pay/cert/alipayCertPublicKey_RSA2.crt',
+                'alipay_public_cert_path' => '/Users/yansongda/pay/cert/alipayCertPublicKey_RSA2.cer',
                 // 必填-支付宝根证书 路径
-                'alipay_root_cert_path' => '/Users/yansongda/pay/cert/alipayRootCert.crt',
+                'alipay_root_cert_path' => '/Users/yansongda/pay/cert/alipayRootCert.cer',
                 'return_url' => 'https://yansongda.cn/alipay/return',
                 'notify_url' => 'https://yansongda.cn/alipay/notify',
                 // 选填-服务商模式下的服务商 id，当 mode 为 Pay::MODE_SERVICE 时使用该参数

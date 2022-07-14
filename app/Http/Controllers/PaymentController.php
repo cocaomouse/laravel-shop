@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Exceptions\InternalException;
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Exceptions\InvalidRequestException;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -19,9 +21,8 @@ class PaymentController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      *
      */
-    public function payByAlipay(Order $order, Request $request)
+    public function payByAlipay(Order $order)
     {
-
         // 判断订单是否属于当前用户
         $this->authorize('own', $order);
         // 订单已支付或者已关闭
@@ -44,32 +45,30 @@ class PaymentController extends Controller
     public function alipayReturn(Request $request)
     {
         // 校验提交的参数是否合法
-        //$data = app('alipay')->verify();
         try {
             $data = $request->all();
         } catch (\Exception $e) {
-            return view('pages.error',['msg' => '数据不正确']);
+            return view('pages.error', ['msg' => '数据不正确']);
         }
 
-        return view('pages.success',['msg' => '付款成功']);
+        return view('pages.success', ['msg' => '付款成功']);
     }
 
     /**
      * 服务端回调
      *
      */
-    public function alipayNotify(Request $request)
+    public function alipayNotify(Request $request,OrderPayment $orderPayment)
     {
-        //$data = app('alipay')->verify();
         // 校验输入参数
-        $data = $request->all();
+        $data = app('alipay')->callback();
         // 如果订单状态不是成功或者结束，则不走后续的逻辑
         // 所有交易状态：https://docs.open.alipay.com/59/103672
-        if (!in_array($data['trade_status'],['TRADE_SUCCESS','TRADE_FINISHED'])) {
+        if (!in_array($data->trade_status, ['TRADE_SUCCESS', 'TRADE_FINISHED'])) {
             return app('alipay')->success();
         }
         // $data->out_trade_no 拿到订单流水号，并在数据库中查询
-        $order = Order::query()->where('no',$data['out_trade_no'])->first();
+        $order = Order::query()->where('no', $data->out_trade_no)->first();
         if (!$order) {
             throw new InvalidRequestException('当前订单不存在');
         }
@@ -78,13 +77,21 @@ class PaymentController extends Controller
             // 返回数据给支付宝
             return app('alipay')->success();
         }
-
+        // 修改订单数据
         $order->update([
             'paid_at' => Carbon::now(),
             'payment_method' => 'alipay',
-            'payment_no' => $data['trade_no'] // 支付宝订单号
+            'payment_no' => $data->trade_no // 支付宝订单号
         ]);
-        \Log::debug('Alipay notify',$data);
+        // 添加支付数据
+        $orderPayment->create([
+            'user_id' => $order->user_id,
+            'order_id' => $order->id,
+            'payment_method' => 'alipay',
+            'payment_verify' =>  $data
+        ]);
+
+        \Log::debug('Alipay notify', json_decode(json_encode($data), true));
         return app('alipay')->success();
     }
 }

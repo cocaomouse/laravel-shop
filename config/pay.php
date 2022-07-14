@@ -11,7 +11,7 @@ return [
             // 必填-应用公钥证书 路径
             'app_public_cert_path' => base_path('public/appCertPublicKey_2021000121617096.cer'),
             // 必填-支付宝公钥证书 路径
-            'alipay_public_cert_path' => base_path('public/alipayCertPublicKey_RSA2.crt'),
+            'alipay_public_cert_path' => base_path('public/alipayCertPublicKey_RSA2.cer'),
             // 必填-支付宝根证书 路径
             'alipay_root_cert_path' => base_path('public/alipayRootCert.cer'),
             'return_url' => env('ALIPAY_RETURN_URL'),
