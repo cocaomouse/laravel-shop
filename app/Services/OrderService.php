@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Order;
-use App\Models\ProductSku;
 use App\Exceptions\InvalidRequestException;
 use App\Jobs\CloseOrder;
+use App\Models\Order;
+use App\Models\ProductSku;
 use App\Models\User;
 use App\Models\UserAddress;
 use Carbon\Carbon;
@@ -13,10 +13,11 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-    public function store(User $user,UserAddress $address, $remark, $items)
+    public function store(User $user, UserAddress $address, $remark, $items)
     {
         // 开启一个数据库事务
         DB::beginTransaction();
+
         try {
             // 更新此地址的最后使用时间
             $address->update(['last_used_at' => Carbon::now()]);
@@ -44,7 +45,7 @@ class OrderService
                 // 同时为$item模型实例添加 amount price 两个对象值
                 $item = $order->items()->make([
                     'amount' => $data['amount'],
-                    'price' => $sku->price
+                    'price' => $sku->price,
                 ]);
                 $item->product()->associate($sku->product_id);//等同于$item->product_id=$sku->product_id(仅在belongsTo时有效)
                 $item->productSku()->associate($sku);
@@ -71,8 +72,8 @@ class OrderService
             return $order;
         } catch (\Exception $e) {
             DB::rollBack();
+
             return false;
         }
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 use Yansongda\Pay\Pay;
 
 return [

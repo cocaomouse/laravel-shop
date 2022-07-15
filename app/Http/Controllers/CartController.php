@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductSku;
-use Illuminate\Http\Request;
 use App\Http\Requests\AddCartRequest;
 use App\Models\CartItem;
+use App\Models\ProductSku;
 use App\Services\CartService;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -21,11 +21,11 @@ class CartController extends Controller
     public function index(Request $request)
     {
         $carItems = $request->user()->cartItems()->with(['productSku.product'])->get();
-        $addresses = $request->user()->addresses()->orderBy('last_used_at','desc')->get();
+        $addresses = $request->user()->addresses()->orderBy('last_used_at', 'desc')->get();
 
         return view('cart.index', [
             'cartItems' => $carItems,
-            'addresses' => $addresses
+            'addresses' => $addresses,
         ]);
     }
 
@@ -34,7 +34,7 @@ class CartController extends Controller
         $skuId = $request->input('sku_id');
         $amount = $request->input('amount');
 
-        $this->cartService->add($skuId,$amount);
+        $this->cartService->add($skuId, $amount);
 
         return [];
     }

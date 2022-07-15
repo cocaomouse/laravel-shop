@@ -138,7 +138,7 @@ return [
         'excepts' => [
             'auth/login',
             'auth/logout',
-            '_handle_action_'
+            '_handle_action_',
         ],
     ],
 
@@ -427,13 +427,13 @@ return [
                             'image',
                             'video',
                             'formula',
-                            'clean'
+                            'clean',
                         ],
                 ],
                 'theme' => 'snow',
                 'height' => '200px',
-            ]
-        ]
+            ],
+        ],
         // 新增编辑器配置结束
-    ]
+    ],
 ];

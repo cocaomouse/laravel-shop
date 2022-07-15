@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -13,7 +12,7 @@ class Product extends Model
 
     protected $fillable = [
         'title', 'description', 'image', 'on_sale',
-        'rating', 'sold_count', 'review_count', 'price'
+        'rating', 'sold_count', 'review_count', 'price',
     ];
     protected $casts = [
         'on_sale' => 'boolean', // on_sale 是一个布尔类型的字段
@@ -26,7 +25,7 @@ class Product extends Model
 
     public function favoriteUsers()
     {
-        return $this->belongsToMany('App\Models\User','user_favorite_products','product_id','user_id');
+        return $this->belongsToMany('App\Models\User', 'user_favorite_products', 'product_id', 'user_id');
     }
 
     public function getImageUrlAttribute()
@@ -35,6 +34,7 @@ class Product extends Model
         if (Str::startsWith($this->attributes['image'], ['http://', 'https://'])) {
             return $this->attributes['image'];
         }
+
         return \Storage::disk('public')->url($this->attributes['image']);
     }
 }

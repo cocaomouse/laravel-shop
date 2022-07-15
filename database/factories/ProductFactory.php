@@ -37,7 +37,7 @@ class ProductFactory extends Factory
             'rating' => $this->faker->numberBetween(0, 5),
             'sold_count' => 0,
             'review_count' => 0,
-            'price' => 0
+            'price' => 0,
         ];
     }
 }

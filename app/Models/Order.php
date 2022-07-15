@@ -9,15 +9,15 @@ class Order extends Model
 {
     use HasFactory;
 
-    const REFUND_STATUS_PENDING = 'pending';
-    const REFUND_STATUS_APPLIED = 'applied';
-    const REFUND_STATUS_PROCESSING = 'processing';
-    const REFUND_STATUS_SUCCESS = 'success';
-    const REFUND_STATUS_FAILED = 'failed';
+    public const REFUND_STATUS_PENDING = 'pending';
+    public const REFUND_STATUS_APPLIED = 'applied';
+    public const REFUND_STATUS_PROCESSING = 'processing';
+    public const REFUND_STATUS_SUCCESS = 'success';
+    public const REFUND_STATUS_FAILED = 'failed';
 
-    const SHIP_STATUS_PENDING = 'pending';
-    const SHIP_STATUS_DELIVERED = 'delivered';
-    const SHIP_STATUS_RECEIVED = 'received';
+    public const SHIP_STATUS_PENDING = 'pending';
+    public const SHIP_STATUS_DELIVERED = 'delivered';
+    public const SHIP_STATUS_RECEIVED = 'received';
 
     public static $refundStatusMap = [
         self::REFUND_STATUS_PENDING => '未退款',
@@ -83,7 +83,7 @@ class Order extends Model
     {
         // 订单流水号前缀
         $prefix = date('YmdHis');
-        for ($i=0;$i<10;$i++) {
+        for ($i = 0;$i < 10;$i++) {
             // 随机生成 6 位的数字
             $no = $prefix.str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
             // 判断是否已经存在
@@ -99,11 +99,11 @@ class Order extends Model
     /*--------------------关联关系-------------------------*/
     public function user()
     {
-        return $this->belongsTo('App\Models\User','user_id','id');
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
     public function items()
     {
-        return $this->hasMany('App\Models\OrderItem','order_id','id');
+        return $this->hasMany('App\Models\OrderItem', 'order_id', 'id');
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\ProductSku;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\ProductSku;
 
 class OrderRequest extends FormRequest
 {

@@ -3,21 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
-use App\Jobs\CloseOrder;
-use App\Models\User;
-use App\Services\CartService;
+use App\Http\Requests\OrderRequest;
+use App\Models\Order;
+use App\Models\UserAddress;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
-use App\Http\Requests\OrderRequest;
-use App\Models\ProductSku;
-use App\Models\UserAddress;
-use App\Models\Order;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
-
     public function index(Request $request)
     {
         $user = $request->user();
@@ -33,18 +26,19 @@ class OrdersController extends Controller
 
     public function store(OrderRequest $request, OrderService $orderService)
     {
-            $user = $request->user();
-            $address_id = $request->input('address_id');
-            $remark = $request->input('remark');
-            $items = $request->input('items');
+        $user = $request->user();
+        $address_id = $request->input('address_id');
+        $remark = $request->input('remark');
+        $items = $request->input('items');
 
-            $address = UserAddress::find($address_id);
-            if (!$address) {
-                throw new InvalidRequestException('用户地址为空');
-            }
+        $address = UserAddress::find($address_id);
+        if (!$address) {
+            throw new InvalidRequestException('用户地址为空');
+        }
 
-            $order = $orderService->store($user,$address,$remark,$items);
-            return $order;
+        $order = $orderService->store($user, $address, $remark, $items);
+
+        return $order;
     }
 
     public function show(Order $order, Request $request)
@@ -54,7 +48,7 @@ class OrdersController extends Controller
         $order_info = $order->load(['items.productSku', 'items.product']);
         //dd($order_info->address['address']);
         return view('orders.show', [
-            'order' => $order_info
+            'order' => $order_info,
         ]);
     }
 }

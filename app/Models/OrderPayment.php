@@ -13,6 +13,6 @@ class OrderPayment extends Model
         'user_id',
         'order_id',
         'payment_method',
-        'payment_verify'
+        'payment_verify',
     ];
 }

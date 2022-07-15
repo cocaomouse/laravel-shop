@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->string('no')->unique();
             $table->unsignedBigInteger('user_id');
             $table->text('address');
-            $table->decimal('total_amount',10,2);
+            $table->decimal('total_amount', 10, 2);
             $table->text('remark')->nullable();
             $table->dateTime('paid_at')->nullable();
             $table->string('payment_method')->nullable();

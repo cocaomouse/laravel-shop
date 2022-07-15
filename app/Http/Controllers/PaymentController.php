@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\InternalException;
-use Illuminate\Http\Request;
+use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
 use App\Models\OrderPayment;
-use App\Exceptions\InvalidRequestException;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
@@ -58,7 +56,7 @@ class PaymentController extends Controller
      * 服务端回调
      *
      */
-    public function alipayNotify(Request $request,OrderPayment $orderPayment)
+    public function alipayNotify(Request $request, OrderPayment $orderPayment)
     {
         // 校验输入参数
         $data = app('alipay')->callback();
@@ -81,17 +79,18 @@ class PaymentController extends Controller
         $order->update([
             'paid_at' => Carbon::now(),
             'payment_method' => 'alipay',
-            'payment_no' => $data->trade_no // 支付宝订单号
+            'payment_no' => $data->trade_no, // 支付宝订单号
         ]);
         // 添加支付数据
         $orderPayment->create([
             'user_id' => $order->user_id,
             'order_id' => $order->id,
             'payment_method' => 'alipay',
-            'payment_verify' =>  $data
+            'payment_verify' => $data,
         ]);
 
         \Log::debug('Alipay notify', json_decode(json_encode($data), true));
+
         return app('alipay')->success();
     }
 }

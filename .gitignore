@@ -16,4 +16,6 @@ yarn-error.log
 .DS_Store
 app/.DS_Store
 app/Http/.DS_Store
+/.php-cs-fixer.dist.php
+/.php-cs-fixer.cache
 

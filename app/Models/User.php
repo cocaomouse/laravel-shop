@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use Encore\Admin\Traits\DefaultDatetimeFormat;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Encore\Admin\Traits\DefaultDatetimeFormat;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
     use DefaultDatetimeFormat;
 
     /**
@@ -46,18 +48,18 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function addresses()
     {
-        return $this->hasMany('App\Models\UserAddress','user_id','id');
+        return $this->hasMany('App\Models\UserAddress', 'user_id', 'id');
     }
 
     public function favoriteProducts()
     {
-        return $this->belongsToMany('App\Models\Product','user_favorite_products','user_id','product_id')
+        return $this->belongsToMany('App\Models\Product', 'user_favorite_products', 'user_id', 'product_id')
             ->withTimestamps()
-            ->orderBy('user_favorite_products.created_at','desc');
+            ->orderBy('user_favorite_products.created_at', 'desc');
     }
 
     public function cartItems()
     {
-        return $this->hasMany('App\Models\CartItem','user_id','id');
+        return $this->hasMany('App\Models\CartItem', 'user_id', 'id');
     }
 }

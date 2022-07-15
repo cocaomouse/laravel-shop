@@ -1,9 +1,9 @@
 <?php
 
-use Illuminate\Routing\Router;
 use App\Admin\Controllers\HomeController;
-use App\Admin\Controllers\UsersController;
 use App\Admin\Controllers\ProductsController;
+use App\Admin\Controllers\UsersController;
+use Illuminate\Routing\Router;
 
 Admin::routes();
 
@@ -18,6 +18,6 @@ Route::group([
     $router->get('products', [ProductsController::class, 'index']);
     $router->get('products/create', [ProductsController::class, 'create']);
     $router->post('products', [ProductsController::class, 'store']);
-    $router->get('products/{id}/edit',[ProductsController::class,'edit']);
-    $router->put('products/{id}',[ProductsController::class,'update']);
+    $router->get('products/{id}/edit', [ProductsController::class,'edit']);
+    $router->put('products/{id}', [ProductsController::class,'update']);
 });

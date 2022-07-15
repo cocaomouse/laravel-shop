@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
-use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\ProductSku;
-use App\Models\User;
+use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
@@ -49,8 +47,8 @@ class ProductsController extends Controller
             'products' => $products,
             'filters' => [
                 'search' => $search,
-                'order' => $order
-            ]
+                'order' => $order,
+            ],
         ]);
     }
 
@@ -71,7 +69,7 @@ class ProductsController extends Controller
 
         return view('products.show', [
             'product' => $product,
-            'favored' => $favored
+            'favored' => $favored,
         ]);
     }
 
@@ -87,7 +85,7 @@ class ProductsController extends Controller
         return [];
     }
 
-    public function disfavor(Product $product,Request $request)
+    public function disfavor(Product $product, Request $request)
     {
         $user = $request->user();
         if (!$user->favoriteProducts()->find($product->id)) {
@@ -103,8 +101,8 @@ class ProductsController extends Controller
     {
         $products = $request->user()->favoriteProducts()->paginate(16);
 
-        return view('products.favorites',[
-            'products' => $products
+        return view('products.favorites', [
+            'products' => $products,
         ]);
     }
 }

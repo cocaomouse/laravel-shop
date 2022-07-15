@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PagesController;
-use App\Http\Controllers\UserAddressesController;
-use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\AlipayController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrdersController;
-use App\Http\Controllers\AlipayController;
+use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\UserAddressesController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,12 +61,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('{user_address}', [UserAddressesController::class, 'destroy'])->name('user_addresses.destroy');
     });
     // 支付
-    Route::get('payment/{order}/alipay',[PaymentController::class,'payByAlipay'])->name('payment.alipay');
+    Route::get('payment/{order}/alipay', [PaymentController::class,'payByAlipay'])->name('payment.alipay');
     // 支付前端回调
-    Route::get('payment/alipay/return',[PaymentController::class,'alipayReturn'])->name('payment.alipay.return');
+    Route::get('payment/alipay/return', [PaymentController::class,'alipayReturn'])->name('payment.alipay.return');
 });
 // 支付服务端回调
-Route::post('payment/alipay/notify',[PaymentController::class,'alipayNotify'])->name('payment.alipay.notify');
+Route::post('payment/alipay/notify', [PaymentController::class,'alipayNotify'])->name('payment.alipay.notify');
 
 Route::prefix('products')->group(function () {
     Route::get('', [ProductsController::class, 'index'])->name('products.index');
