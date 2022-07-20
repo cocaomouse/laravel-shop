@@ -35,4 +35,14 @@ class OrderPaid
     {
         return new PrivateChannel('channel-name');
     }
+
+    /**
+     * 获取当前订单对象
+     *
+     * @return object
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
 }

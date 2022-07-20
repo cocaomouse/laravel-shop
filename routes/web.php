@@ -77,3 +77,6 @@ Route::prefix('products')->group(function () {
     });
     Route::get('{product}', [ProductsController::class, 'show'])->name('products.show');
 });
+
+// 发送邮件测试
+//Route::get('payment/take_email', [PaymentController::class,'takeEmail'])->name('payment.take_email');

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderPaid;
 use App\Exceptions\InvalidRequestException;
 use App\Models\Order;
 use App\Models\OrderPayment;
+use App\Notifications\OrderPaidNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -89,8 +92,26 @@ class PaymentController extends Controller
             'payment_verify' => $data,
         ]);
 
-        \Log::debug('Alipay notify', json_decode(json_encode($data), true));
+        Log::debug('Alipay notify', json_decode(json_encode($data), true));
+
+        $this->afterPaid($order);
 
         return app('alipay')->success();
     }
+
+    /**
+     * 支付完成后触发的事件
+     *
+     */
+    protected function afterPaid(Order $order)
+    {
+        event(new OrderPaid($order));
+    }
+
+    /*public function takeEmail()
+    {
+        $order = Order::query()->where('id',72)->first();
+        // 调用 notify 方法来发送通知
+        $order->user->notify(new OrderPaidNotification($order));
+    }*/
 }
