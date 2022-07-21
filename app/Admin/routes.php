@@ -1,6 +1,7 @@
 <?php
 
 use App\Admin\Controllers\HomeController;
+use App\Admin\Controllers\OrdersController;
 use App\Admin\Controllers\ProductsController;
 use App\Admin\Controllers\UsersController;
 use Illuminate\Routing\Router;
@@ -20,4 +21,5 @@ Route::group([
     $router->post('products', [ProductsController::class, 'store']);
     $router->get('products/{id}/edit', [ProductsController::class,'edit']);
     $router->put('products/{id}', [ProductsController::class,'update']);
+    $router->get('orders', [OrdersController::class,'index'])->name('orders.index');
 });

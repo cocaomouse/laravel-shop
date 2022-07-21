@@ -4,9 +4,7 @@ namespace App\Listeners;
 
 use App\Events\OrderPaid;
 use App\Notifications\OrderPaidNotification;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Mail;
 
 class SendOrderPaidMail implements ShouldQueue
 {
