@@ -21,5 +21,6 @@ Route::group([
     $router->post('products', [ProductsController::class, 'store']);
     $router->get('products/{id}/edit', [ProductsController::class,'edit']);
     $router->put('products/{id}', [ProductsController::class,'update']);
-    $router->get('orders', [OrdersController::class,'index'])->name('orders.index');
+    $router->get('orders', [OrdersController::class,'index'])->name('admin.orders.index');
+    $router->get('orders/{order}', [OrdersController::class,'show'])->name('admin.orders.show');
 });
