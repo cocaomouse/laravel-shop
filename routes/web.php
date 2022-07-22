@@ -50,6 +50,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('', [OrdersController::class, 'index'])->name('orders.index');
         // 订单详情
         Route::get('{order}', [OrdersController::class, 'show'])->name('orders.show');
+        // 确认收货
+        Route::post('{order}/received', [OrdersController::class,'received'])->name('orders.received');
     });
     // 用户地址
     Route::prefix('user_addresses')->group(function () {
