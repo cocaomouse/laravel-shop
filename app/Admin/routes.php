@@ -23,4 +23,5 @@ Route::group([
     $router->put('products/{id}', [ProductsController::class,'update']);
     $router->get('orders', [OrdersController::class,'index'])->name('admin.orders.index');
     $router->get('orders/{order}', [OrdersController::class,'show'])->name('admin.orders.show');
+    $router->post('orders/{order}/ship', [OrdersController::class,'ship'])->name('admin.orders.ship');
 });
