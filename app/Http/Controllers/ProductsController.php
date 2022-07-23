@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -66,10 +67,18 @@ class ProductsController extends Controller
             // boolval() 函数用于把值转为布尔值
             $favored = boolval($user->favoriteProducts()->find($product->id));
         }
+        // 商品的评价
+        $reviews = OrderItem::query()
+            ->with(['order.user','productSku'])
+            ->whereNotNull('reviewed_at')
+            ->orderBy('reviewed_at', 'desc')
+            ->limit(10)
+            ->get();
 
         return view('products.show', [
             'product' => $product,
             'favored' => $favored,
+            'reviews' => $reviews,
         ]);
     }
 

@@ -52,6 +52,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('{order}', [OrdersController::class, 'show'])->name('orders.show');
         // 确认收货
         Route::post('{order}/received', [OrdersController::class,'received'])->name('orders.received');
+        // 用户评价
+        Route::get('{order}/review', [OrdersController::class,'review'])->name('orders.review.show');
+        Route::post('{order}/review', [OrdersController::class,'sendReview'])->name('orders.review.store');
+        // 退款申请
+        Route::post('{order}/apply_refund', [OrdersController::class,'applyRefund'])->name('orders.apply_refund');
     });
     // 用户地址
     Route::prefix('user_addresses')->group(function () {
