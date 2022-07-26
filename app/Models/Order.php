@@ -134,4 +134,9 @@ class Order extends Model
     {
         return $this->hasMany('App\Models\OrderItem', 'order_id', 'id');
     }
+
+    public function couponCode()
+    {
+        return $this->belongsTo('App\Models\CouponCode', 'coupon_code_id', 'id');
+    }
 }

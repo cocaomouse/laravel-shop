@@ -1,5 +1,6 @@
 <?php
 
+use App\Admin\Controllers\CouponCodesController;
 use App\Admin\Controllers\HomeController;
 use App\Admin\Controllers\OrdersController;
 use App\Admin\Controllers\ProductsController;
@@ -25,4 +26,5 @@ Route::group([
     $router->get('orders/{order}', [OrdersController::class,'show'])->name('admin.orders.show');
     $router->post('orders/{order}/ship', [OrdersController::class,'ship'])->name('admin.orders.ship');
     $router->post('orders/{order}/refund', [OrdersController::class,'handleRefund'])->name('admin.orders.handle_refund');
+    $router->get('coupon_codes', [CouponCodesController::class,'index']);
 });
