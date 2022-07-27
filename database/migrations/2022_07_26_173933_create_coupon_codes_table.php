@@ -24,7 +24,7 @@ class CreateCouponCodesTable extends Migration
             $table->decimal('min_amount', 10, 2)->comment('使用该优惠券的最低订单金额');
             $table->dateTime('not_before')->nullable()->comment('在这个时间之前不可用');
             $table->dateTime('not_after')->nullable()->comment('在这个时间之后不可用');
-            $table->boolean('enable')->comment('优惠券是否生效');
+            $table->boolean('enabled')->comment('优惠券是否生效');
             $table->timestamps();
         });
     }
