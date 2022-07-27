@@ -35,7 +35,7 @@ class CouponCodesController extends AdminController
         $grid->column('usage', '用量')->display(function ($value) {
             return "{$this->used}/{$this->total}";
         });
-        $grid->enable('是否启用')->display(function ($value) {
+        $grid->enabled('是否启用')->display(function ($value) {
             return $value ? '是' : '否';
         });
         $grid->created_at('创建时间');

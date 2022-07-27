@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AlipayController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CouponCodesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\PaymentController;
@@ -71,6 +72,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('payment/{order}/alipay', [PaymentController::class,'payByAlipay'])->name('payment.alipay');
     // 支付前端回调
     Route::get('payment/alipay/return', [PaymentController::class,'alipayReturn'])->name('payment.alipay.return');
+    // 优惠券列表
+    Route::get('coupon_codes/{code}', [CouponCodesController::class,'show'])->name('coupon_codes.show');
 });
 // 支付服务端回调
 Route::post('payment/alipay/notify', [PaymentController::class,'alipayNotify'])->name('payment.alipay.notify');
