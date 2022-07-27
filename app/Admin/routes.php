@@ -29,4 +29,7 @@ Route::group([
     $router->get('coupon_codes', [CouponCodesController::class,'index']);
     $router->post('coupon_codes', [CouponCodesController::class,'store']);
     $router->get('coupon_codes/create', [CouponCodesController::class,'create']);
+    $router->get('coupon_codes/{id}/edit', [CouponCodesController::class,'edit']);
+    $router->put('coupon_codes/{id}', [CouponCodesController::class,'update']);
+    $router->delete('coupon_codes/{id}', [CouponCodesController::class,'destroy']);
 });
