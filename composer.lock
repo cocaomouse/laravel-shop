@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d04dd073d81424f6f6d90be5c3bf3c6",
+    "content-hash": "f3bc7eed2f151b84056a8d40cb9f4abe",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1013,16 +1013,16 @@
         },
         {
             "name": "encore/laravel-admin",
-            "version": "v1.8.11",
+            "version": "v1.8.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/z-song/laravel-admin.git",
-                "reference": "6ddd381a9f4928b6c2175dea297e6a8b385d8d28"
+                "reference": "6c292ebb5efa886fa4776d86e975180608505946"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/z-song/laravel-admin/zipball/6ddd381a9f4928b6c2175dea297e6a8b385d8d28",
-                "reference": "6ddd381a9f4928b6c2175dea297e6a8b385d8d28",
+                "url": "https://api.github.com/repos/z-song/laravel-admin/zipball/6c292ebb5efa886fa4776d86e975180608505946",
+                "reference": "6c292ebb5efa886fa4776d86e975180608505946",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1032,7 +1032,7 @@
                 ]
             },
             "require": {
-                "doctrine/dbal": "2.*",
+                "doctrine/dbal": "2.*|3.*",
                 "laravel/framework": ">=5.5",
                 "php": ">=7.0.0",
                 "symfony/dom-crawler": "~3.1|~4.0|~5.0"
@@ -1087,9 +1087,9 @@
             ],
             "support": {
                 "issues": "https://github.com/z-song/laravel-admin/issues",
-                "source": "https://github.com/z-song/laravel-admin/tree/v1.8.11"
+                "source": "https://github.com/z-song/laravel-admin/tree/v1.8.19"
             },
-            "time": "2020-11-15T02:55:51+00:00"
+            "time": "2022-05-24T03:49:38+00:00"
         },
         {
             "name": "endroid/qr-code",
