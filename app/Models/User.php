@@ -46,6 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    /*--------------------关联关系-------------------------*/
     public function addresses()
     {
         return $this->hasMany('App\Models\UserAddress', 'user_id', 'id');
