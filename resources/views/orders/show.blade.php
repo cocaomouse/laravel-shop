@@ -87,6 +87,18 @@
               @endif
             </div>
             <div class="order-summary text-right" style="text-align:right;">
+              <!-- 展示优惠信息开始 -->
+              @if($order->couponCode)
+                <div class="text-primary">
+                  <span>优惠信息：</span>
+                  <div class="value">{{ $order->couponCode->description }}</div>
+                </div>
+              @endif
+              <!-- 展示优惠信息结束 -->
+              <div class="total-amount">
+                <span>订单总价：</span>
+                <div class="value">￥{{ $order->total_amount }}</div>
+              </div>
               <div class="total-amount">
                 <span>订单总价：</span>
                 <div class="value" style="width:100px;">￥{{ $order->total_amount }}</div>

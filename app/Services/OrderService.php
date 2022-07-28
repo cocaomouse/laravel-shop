@@ -11,7 +11,6 @@ use App\Models\ProductSku;
 use App\Models\User;
 use App\Models\UserAddress;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
@@ -20,13 +19,11 @@ class OrderService
         // 如果传入了优惠券,则先检查是否可用
         if ($couponCode) {
             // 此时还没有计算出订单总金额，因此先不校验
-            $couponCode->checkAvailable();
+            $couponCode->checkAvailable($user);
         }
 
         // 开启一个数据库事务
-        DB::beginTransaction();
-
-        try {
+        $order = \DB::transaction(function () use ($user, $address, $remark, $items, $couponCode) {
             // 更新此地址的最后使用时间
             $address->update(['last_used_at' => Carbon::now()]);
             // 创建一个新订单
@@ -68,7 +65,7 @@ class OrderService
             // 计算优惠券使用后的订单金额
             if ($couponCode) {
                 // 总金额已经计算出来了，检查是否符合优惠券规则
-                $couponCode->checkAvailable($totalAmount);
+                $couponCode->checkAvailable($user, $totalAmount);
                 // 把订单金额修改为优惠后的金额
                 $totalAmount = $couponCode->getAdjustedPrice($totalAmount);
                 // 将订单与优惠券关联
@@ -88,16 +85,11 @@ class OrderService
             $skuIds = collect($items)->pluck('sku_id')->all(); //从$items中创建一个新的集合,并获取对应的键值对
             app(CartService::class)->remove($skuIds);
 
-            DB::commit();
-
-            // 触发 定时关闭订单 队列任务
-            dispatch(new CloseOrder($order, config('app.order_ttl')));
-
             return $order;
-        } catch (\Exception $e) {
-            DB::rollBack();
+        });
+        // 触发 定时关闭订单 队列任务
+        dispatch(new CloseOrder($order, config('app.order_ttl')));
 
-            return false;
-        }
+        return $order;
     }
 }
