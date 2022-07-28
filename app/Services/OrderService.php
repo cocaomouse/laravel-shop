@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Exceptions\CouponCodeUnavailableException;
 use App\Exceptions\InvalidRequestException;
 use App\Jobs\CloseOrder;
+use App\Models\CouponCode;
 use App\Models\Order;
 use App\Models\ProductSku;
 use App\Models\User;
@@ -13,8 +15,14 @@ use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
-    public function store(User $user, UserAddress $address, $remark, $items)
+    public function store(User $user, UserAddress $address, $remark, $items, CouponCode $couponCode = null)
     {
+        // 如果传入了优惠券,则先检查是否可用
+        if ($couponCode) {
+            // 此时还没有计算出订单总金额，因此先不校验
+            $couponCode->checkAvailable();
+        }
+
         // 开启一个数据库事务
         DB::beginTransaction();
 
@@ -57,6 +65,22 @@ class OrderService
                     throw new InvalidRequestException('该商品库存不足');
                 }
             }
+            // 计算优惠券使用后的订单金额
+            if ($couponCode) {
+                // 总金额已经计算出来了，检查是否符合优惠券规则
+                $couponCode->checkAvailable($totalAmount);
+                // 把订单金额修改为优惠后的金额
+                $totalAmount = $couponCode->getAdjustedPrice($totalAmount);
+                // 将订单与优惠券关联
+                // 基于Order belongsTo CouponCode,利用associate方法将$couponCode->id保存到$order->coupon_code_id中
+                // 此方法将现有的couponCode模型绑到order模型上,可不必再去查一次库
+                $order->couponCode()->associate($couponCode);
+                // 增加 减少 优惠券的使用量，需判断返回值
+                if ($couponCode->changeUsed() <= 0) {
+                    throw new CouponCodeUnavailableException('该优惠券已被兑完');
+                }
+            }
+
             // 更新订单总金额
             $order->update(['total_amount' => $totalAmount]);
 
@@ -66,7 +90,7 @@ class OrderService
 
             DB::commit();
 
-            // 触发队列任务
+            // 触发 定时关闭订单 队列任务
             dispatch(new CloseOrder($order, config('app.order_ttl')));
 
             return $order;

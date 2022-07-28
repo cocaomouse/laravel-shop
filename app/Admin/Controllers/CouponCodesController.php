@@ -66,7 +66,7 @@ class CouponCodesController extends AdminController
         $show->field('min_amount', __('Min amount'));
         $show->field('not_before', __('Not before'));
         $show->field('not_after', __('Not after'));
-        $show->field('enable', __('Enable'));
+        $show->field('enabled', __('Enabled'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 

@@ -48,7 +48,7 @@ class CouponCodeFactory extends Factory
             'min_amount' => $minAmount,
             'not_before' => null,
             'not_after' => null,
-            'enable' => true,
+            'enabled' => true,
         ];
     }
 }

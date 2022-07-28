@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\OrderReviewed;
+use App\Exceptions\CouponCodeUnavailableException;
 use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\ApplyRefundRequest;
 use App\Http\Requests\OrderRequest;
 use App\Http\Requests\SendReviewRequest;
+use App\Models\CouponCode;
 use App\Models\Order;
 use App\Models\UserAddress;
 use App\Services\OrderService;
@@ -34,13 +36,25 @@ class OrdersController extends Controller
         $address_id = $request->input('address_id');
         $remark = $request->input('remark');
         $items = $request->input('items');
+        // 优惠券
+        $coupon = null;
+        // 优惠码
+        $code = $request->input('coupon_code');
 
         $address = UserAddress::find($address_id);
         if (!$address) {
             throw new InvalidRequestException('用户地址为空');
         }
 
-        $order = $orderService->store($user, $address, $remark, $items);
+        // 如果用户提交了优惠券
+        if ($code) {
+            $coupon = CouponCode::query()->where('code', $code)->first();
+            if (!$coupon) {
+                throw new CouponCodeUnavailableException('优惠券不存在');
+            }
+        }
+
+        $order = $orderService->store($user, $address, $remark, $items, $coupon);
 
         return $order;
     }
